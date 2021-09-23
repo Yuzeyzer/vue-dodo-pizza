@@ -1,7 +1,10 @@
 <template>
 	<div class="categories">
 		<ul>
-			<li @click="activeItem = null" :class="{ active: activeItem === null }">
+			<li
+				@click="handleClickNullCategory"
+				:class="{ active: activeItem === null }"
+			>
 				Все
 			</li>
 			<li
@@ -18,8 +21,11 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import { useStore } from "vuex";
 export default {
 	setup() {
+		const store = useStore();
+
 		const activeItem = ref(null);
 		const categoriesItems = ref([
 			"Мясные",
@@ -29,9 +35,22 @@ export default {
 			"Закрытые",
 		]);
 
-		const handleActiveItem = (i) => (activeItem.value = i);
+		const handleActiveItem = (i) => {
+			activeItem.value = i;
+			store.commit("SET_CATEGORY", i);
+		};
 
-		return { categoriesItems, handleActiveItem, activeItem };
+		const handleClickNullCategory = () => {
+			activeItem.value = null;
+			store.commit("SET_CATEGORY", null);
+		};
+
+		return {
+			categoriesItems,
+			handleActiveItem,
+			activeItem,
+			handleClickNullCategory,
+		};
 	},
 };
 </script>
