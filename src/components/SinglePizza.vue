@@ -8,13 +8,24 @@
 		<h4 class="pizza-block__title">Чизбургер-пицца</h4>
 		<div class="pizza-block__selector">
 			<ul>
-				<li class="active">тонкое</li>
-				<li>традиционное</li>
+				<li
+					v-for="(item, index) in pizzaTypes"
+					:key="item"
+					:class="{ active: activePizzaType === index }"
+					@click="setAcivePizzaType(index)"
+				>
+					{{ item }}
+				</li>
 			</ul>
 			<ul>
-				<li class="active">26 см.</li>
-				<li>30 см.</li>
-				<li>40 см.</li>
+				<li
+					v-for="(item, index) in pizzaSizes"
+					:key="item"
+					:class="{ active: activePizzaSize === index }"
+					@click="setAcivePizzaSize(index)"
+				>
+					{{ item }} см
+				</li>
 			</ul>
 		</div>
 		<div class="pizza-block__bottom">
@@ -46,7 +57,25 @@ export default {
 		const pizzaTypes = ref(["Тонкое", "Традиционное"]);
 		const pizzaSizes = ref(["26", "30", "40"]);
 
-		return { pizzaTypes, pizzaSizes };
+		const activePizzaType = ref(0);
+		const activePizzaSize = ref(0);
+
+		const setAcivePizzaType = (index) => {
+			activePizzaType.value = index;
+		};
+
+		const setAcivePizzaSize = (index) => {
+			activePizzaSize.value = index;
+		};
+
+		return {
+			pizzaTypes,
+			pizzaSizes,
+			activePizzaType,
+			activePizzaSize,
+			setAcivePizzaType,
+			setAcivePizzaSize,
+		};
 	},
 };
 </script>
