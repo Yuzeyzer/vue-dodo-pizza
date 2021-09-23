@@ -19,7 +19,7 @@ import { ref } from "@vue/reactivity";
 export default {
 	props: ["sizes"],
 	setup(props) {
-		const sizes = props.sizes;
+		const { sizes } = props;
 		const pizzaSizes = ref([26, 30, 40]);
 
 		const activePizzaSize = ref(0);
