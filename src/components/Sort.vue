@@ -1,5 +1,5 @@
 <template>
-	<div class="sort">
+	<div class="sort" v-click-outside="closeModal">
 		<div @click="showPopup = !showPopup" class="sort__label">
 			<svg
 				:class="{ active: showPopup }"
@@ -64,13 +64,17 @@ export default {
 			store.commit("SET_CATEGORY", null);
 		};
 
+    const closeModal = () => {
+      	showPopup.value = false;
+    }
+
 		watchEffect(() => {
 			if (storeSortBy.value === "rating") {
 				activeSortItem.value = 0;
 			}
 		}, storeSortBy);
 
-		return { showPopup, sortItems, activeSortItem, handleActiveItem };
+		return { showPopup, sortItems, activeSortItem, handleActiveItem,closeModal };
 	},
 };
 </script>
