@@ -3,19 +3,7 @@
 		<img class="pizza-block__image" :src="pizza.imageUrl" :alt="pizza.name" />
 		<h4 class="pizza-block__title">{{ pizza.name }}</h4>
 		<div class="pizza-block__selector">
-			<ul>
-				<li
-					v-for="(item, index) in pizzaTypes"
-					:key="item"
-					:class="{
-						active: activePizzaType === index,
-						disabled: !pizza.types.includes(index),
-					}"
-					@click="setAcivePizzaType(index)"
-				>
-					{{ item }}
-				</li>
-			</ul>
+			<Types :types="pizza.types" />
 			<Sizes :sizes="pizza.sizes" />
 		</div>
 		<div class="pizza-block__bottom">
@@ -43,8 +31,9 @@
 <script>
 import { ref } from "@vue/reactivity";
 import Sizes from "./Sizes";
+import Types from "./Types";
 export default {
-	components: { Sizes },
+	components: { Sizes, Types },
 	props: ["pizza"],
 	setup(props) {
 		const { types } = props.pizza;
@@ -60,8 +49,6 @@ export default {
 		const setAcivePizzaType = (index) => {
 			activePizzaType.value = index;
 		};
-
-
 
 		return {
 			pizzaTypes,
