@@ -16,19 +16,7 @@
 					{{ item }}
 				</li>
 			</ul>
-			<ul>
-				<li
-					v-for="(item, index) in pizzaSizes"
-					:key="item"
-					:class="{
-						active: activePizzaSize === index && pizza.sizes.includes(item),
-						disabled: !pizza.sizes.includes(item),
-					}"
-					@click="setAcivePizzaSize(index)"
-				>
-					{{ item }} см
-				</li>
-			</ul>
+			<Sizes :sizes="pizza.sizes" />
 		</div>
 		<div class="pizza-block__bottom">
 			<div class="pizza-block__price">от {{ pizza.price }} ₽</div>
@@ -54,22 +42,16 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import Sizes from "./Sizes";
 export default {
+	components: { Sizes },
 	props: ["pizza"],
 	setup(props) {
-		const { sizes, types } = props.pizza;
+		const { types } = props.pizza;
 
 		const pizzaTypes = ref(["Тонкое", "Традиционное"]);
-		const pizzaSizes = ref([26, 30, 40]);
 
 		const activePizzaType = ref(0);
-		const activePizzaSize = ref(0);
-
-		if (sizes[0] !== pizzaSizes[0]) {
-			activePizzaSize.value = pizzaSizes.value.findIndex(
-				(item) => item === sizes[0]
-			);
-		}
 
 		if (types.length < 2) {
 			activePizzaType.value = types[0];
@@ -79,17 +61,12 @@ export default {
 			activePizzaType.value = index;
 		};
 
-		const setAcivePizzaSize = (index) => {
-			activePizzaSize.value = index;
-		};
+
 
 		return {
 			pizzaTypes,
-			pizzaSizes,
 			activePizzaType,
-			activePizzaSize,
 			setAcivePizzaType,
-			setAcivePizzaSize,
 		};
 	},
 };
