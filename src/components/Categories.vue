@@ -3,12 +3,12 @@
 		<ul>
 			<li
 				@click="handleClickNullCategory"
-				:class="{ active: activeItem === null }"
+				:class="{ active: storeCategory === null }"
 			>
 				Все
 			</li>
 			<li
-				:class="{ active: i === activeItem }"
+				:class="{ active: i === storeCategory }"
 				v-for="(item, i) in categoriesItems"
 				:key="item"
 				@click="handleActiveItem(i)"
@@ -20,11 +20,12 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
 import { useStore } from "vuex";
 export default {
 	setup() {
 		const store = useStore();
+		const storeCategory = computed(() => store.state.category);
 
 		const activeItem = ref(null);
 		const categoriesItems = ref([
@@ -36,19 +37,19 @@ export default {
 		]);
 
 		const handleActiveItem = (i) => {
-			activeItem.value = i;
 			store.dispatch("getFilteredPizzas", i);
+			store.commit("SET_SORT", "rating");
 		};
 
 		const handleClickNullCategory = () => {
-			activeItem.value = null;
 			store.dispatch("getPizzasAPI");
+			store.commit("SET_SORT", "rating");
 		};
 
 		return {
 			categoriesItems,
 			handleActiveItem,
-			activeItem,
+			storeCategory,
 			handleClickNullCategory,
 		};
 	},

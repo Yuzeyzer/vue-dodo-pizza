@@ -15,7 +15,7 @@
 				/>
 			</svg>
 			<b>Сортировка по:</b>
-			<span>{{ sortItems[activeSortItem] }}</span>
+			<span>{{ sortItems[activeSortItem].name }}</span>
 		</div>
 		<div v-if="showPopup" class="sort__popup">
 			<ul>
@@ -23,9 +23,9 @@
 					@click="handleActiveItem(index)"
 					:class="{ active: activeSortItem === index }"
 					v-for="(item, index) in sortItems"
-					:key="item"
+					:key="item.name"
 				>
-					{{ item }}
+					{{ item.name }}
 				</li>
 			</ul>
 		</div>
@@ -33,17 +33,42 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
+import { useStore } from "vuex";
+import { watch, watchEffect } from "@vue/runtime-core";
 export default {
 	setup() {
+		const store = useStore();
+		const storeSortBy = computed(() => store.state.sortBy);
 		const showPopup = ref(false);
-		const activeSortItem = ref(1);
-		const sortItems = ref(["популярности", "цене", "алфавиту"]);
+		const activeSortItem = ref(0);
+		const sortItems = [
+			{
+				name: "популярности",
+				type: "rating",
+			},
+			{
+				name: "цене",
+				type: "price",
+			},
+			{
+				name: "алфавиту",
+				type: "name",
+			},
+		];
 
 		const handleActiveItem = (index) => {
 			activeSortItem.value = index;
 			showPopup.value = false;
+			store.dispatch("setSortBy", sortItems[index].type);
+			store.commit("SET_CATEGORY", null);
 		};
+
+		watchEffect(() => {
+			if (storeSortBy.value === "rating") {
+				activeSortItem.value = 0;
+			}
+		}, storeSortBy);
 
 		return { showPopup, sortItems, activeSortItem, handleActiveItem };
 	},
