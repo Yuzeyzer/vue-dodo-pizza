@@ -1,17 +1,16 @@
 <template>
 	<div class="pizza-block">
-		<img
-			class="pizza-block__image"
-			src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-			alt="Pizza"
-		/>
-		<h4 class="pizza-block__title">Чизбургер-пицца</h4>
+		<img class="pizza-block__image" :src="pizza.imageUrl" :alt="pizza.name" />
+		<h4 class="pizza-block__title">{{ pizza.name }}</h4>
 		<div class="pizza-block__selector">
 			<ul>
 				<li
 					v-for="(item, index) in pizzaTypes"
 					:key="item"
-					:class="{ active: activePizzaType === index }"
+					:class="{
+						active: activePizzaType === index,
+						disabled: !pizza.types.includes(index),
+					}"
 					@click="setAcivePizzaType(index)"
 				>
 					{{ item }}
@@ -21,7 +20,10 @@
 				<li
 					v-for="(item, index) in pizzaSizes"
 					:key="item"
-					:class="{ active: activePizzaSize === index }"
+					:class="{
+						active: activePizzaSize === index && pizza.sizes.includes(item),
+						disabled: !pizza.sizes.includes(item),
+					}"
 					@click="setAcivePizzaSize(index)"
 				>
 					{{ item }} см
@@ -29,7 +31,7 @@
 			</ul>
 		</div>
 		<div class="pizza-block__bottom">
-			<div class="pizza-block__price">от 395 ₽</div>
+			<div class="pizza-block__price">от {{ pizza.price }} ₽</div>
 			<div class="button button--outline button--add">
 				<svg
 					width="12"
@@ -53,12 +55,25 @@
 <script>
 import { ref } from "@vue/reactivity";
 export default {
-	setup() {
+	props: ["pizza"],
+	setup(props) {
+		const { sizes, types } = props.pizza;
+
 		const pizzaTypes = ref(["Тонкое", "Традиционное"]);
-		const pizzaSizes = ref(["26", "30", "40"]);
+		const pizzaSizes = ref([26, 30, 40]);
 
 		const activePizzaType = ref(0);
 		const activePizzaSize = ref(0);
+
+		if (sizes[0] !== pizzaSizes[0]) {
+			activePizzaSize.value = pizzaSizes.value.findIndex(
+				(item) => item === sizes[0]
+			);
+		}
+
+		if (types.length < 2) {
+			activePizzaType.value = types[0];
+		}
 
 		const setAcivePizzaType = (index) => {
 			activePizzaType.value = index;
@@ -129,6 +144,10 @@ export default {
 					box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);
 					border-radius: 5px;
 					cursor: auto;
+				}
+				&.disabled {
+					opacity: 0.5;
+					pointer-events: none;
 				}
 			}
 		}
