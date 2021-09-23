@@ -36,24 +36,8 @@ export default {
 	components: { Sizes, Types },
 	props: ["pizza"],
 	setup(props) {
-		const { types } = props.pizza;
-
-		const pizzaTypes = ref(["Тонкое", "Традиционное"]);
-
-		const activePizzaType = ref(0);
-
-		if (types.length < 2) {
-			activePizzaType.value = types[0];
-		}
-
-		const setAcivePizzaType = (index) => {
-			activePizzaType.value = index;
-		};
 
 		return {
-			pizzaTypes,
-			activePizzaType,
-			setAcivePizzaType,
 		};
 	},
 };
