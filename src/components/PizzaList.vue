@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import PizzaItem from "./SinglePizza.vue";
+import PizzaItem from "./Pizza/Item.vue";
 import { useStore } from "vuex";
 import { computed } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
