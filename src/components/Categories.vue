@@ -37,12 +37,12 @@ export default {
 
 		const handleActiveItem = (i) => {
 			activeItem.value = i;
-			store.commit("SET_CATEGORY", i);
+			store.dispatch("getFilteredPizzas", i);
 		};
 
 		const handleClickNullCategory = () => {
 			activeItem.value = null;
-			store.commit("SET_CATEGORY", null);
+			store.dispatch("getPizzasAPI");
 		};
 
 		return {
