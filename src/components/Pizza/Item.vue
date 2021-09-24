@@ -8,7 +8,10 @@
 		</div>
 		<div class="pizza-block__bottom">
 			<div class="pizza-block__price">от {{ pizza.price }} ₽</div>
-			<div class="button button--outline button--add">
+			<div
+				@click="handleAddPizzaToCart(pizza)"
+				class="button button--outline button--add"
+			>
 				<svg
 					width="12"
 					height="12"
@@ -29,16 +32,21 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { ref, computed } from "@vue/reactivity";
 import Sizes from "./Sizes";
 import Types from "./Types";
+import { useStore } from "vuex";
 export default {
 	components: { Sizes, Types },
 	props: ["pizza"],
 	setup(props) {
-
-		return {
+		const store = useStore();
+    
+		const handleAddPizzaToCart = (pizza) => {
+			store.commit("ADD_CART", pizza);
 		};
+
+		return { handleAddPizzaToCart };
 	},
 };
 </script>

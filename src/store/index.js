@@ -5,6 +5,7 @@ export default createStore({
 		pizzas: [],
 		category: null,
 		sortBy: 'rating',
+		cartItems: new Map(),
 	},
 	mutations: {
 		GET_PIZZAS(state, pizzas) {
@@ -14,8 +15,11 @@ export default createStore({
 			state.category = categoryValue
 		},
 		SET_SORT(state, value) {
-      state.sortBy = value
-    },
+			state.sortBy = value
+		},
+		ADD_CART(state, newPizza) {
+			state.cartItems.set(newPizza, newPizza)
+		},
 	},
 	actions: {
 		async getPizzasAPI({ commit }) {
